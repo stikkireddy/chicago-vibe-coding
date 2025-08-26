@@ -41,11 +41,11 @@ graph TB
         E4[AI/BI Components]
     end
     
-    subgraph "Infrastructure"
+    subgraph "Vibe Coding Stack"
         F[Environment Configuration]
         F1[Docker/Local Development]
         F2[tmux Session Management]
-        F3[Claude Code MCP Tools]
+        F3[Claude Code + MCP Tools]
     end
     
     A -->|HTTP REST API| B
