@@ -90,7 +90,7 @@ export default function HomeScreen() {
       </ThemedView>
       
       {deviceRegistration && !isLoading && !error && (
-        <GyroscopeDisplay />
+        <GyroscopeDisplay deviceId={deviceRegistration.device_id} />
       )}
       
       <ThemedView style={styles.contentContainer}>

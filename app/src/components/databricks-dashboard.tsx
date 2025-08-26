@@ -77,6 +77,7 @@ export function DatabricksDashboardMount() {
           })
         }
 
+
         console.log("Running dashboard.initialize()...")
         dashboardRef.current.initialize()
         console.log("Dashboard initialized successfully!")

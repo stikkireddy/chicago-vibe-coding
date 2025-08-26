@@ -45,6 +45,8 @@
 - Add async PostgreSQL support with proper connection pooling
 - Create device registration API endpoint using database schema from @app/
 - Integrate with Databricks PostgreSQL database for device management
+- Create ingest API endpoint that accepts array of DeviceDataRecord and streams to Databricks table
+- Use ZerobusSdk streaming functionality with flush and close operations for data ingestion
 
 ## Mobile App Development & Device Registration
 - Clean up React Native Expo app and apply Databricks branding/logo
@@ -54,6 +56,15 @@
 - Display device ID, status, and timestamp from server response
 - Show registration states: initial button, loading, success, and error handling
 - Only display gyroscope data after successful device registration
+
+## Mobile App Data Streaming & Buffering
+- Buffer gyroscope data every 5 seconds and post to ingest router
+- Create data buffering mechanism with 5-second intervals
+- Implement ingest API service for posting DeviceDataRecord arrays
+- Update GyroscopeDisplay to collect and stream sensor data
+- Add movement analysis and motion detection from gyroscope readings
+- Show real-time buffer status and data streaming indicators
+- Fix data collection frequency from 10 records/second to 1 record/second
 
 ## UI & Design Improvements
 - Fix text color contrast for better readability

@@ -30,6 +30,12 @@ ingest-example-module:
 ingest-example-direct:
 	uv run python src/gateway/ingest/example.py
 
+# Test ingest API endpoint
+test-ingest-api:
+	curl -X POST "http://localhost:8099/api/v1/ingest/" \
+		-H "Content-Type: application/json" \
+		-d '{"records": [{"device_id": "test-device-1", "x_axis": 1.0, "y_axis": 2.0, "z_axis": 3.0, "movement": "idle", "timestamp": 1640995200}]}'
+
 # Lint code
 lint:
 	uv run flake8 src/

@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, Alert } from 'react-native';
 import { Gyroscope } from 'expo-sensors';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
+import { DataBuffer } from '@/utils/dataBuffer';
+import { getMovementDescription } from '@/utils/motionUtils';
 
 interface GyroscopeData {
   x: number;
@@ -10,12 +12,24 @@ interface GyroscopeData {
   z: number;
 }
 
-export default function GyroscopeDisplay() {
+interface GyroscopeDisplayProps {
+  deviceId?: string;
+}
+
+export default function GyroscopeDisplay({ deviceId }: GyroscopeDisplayProps) {
   const [data, setData] = useState<GyroscopeData>({ x: 0, y: 0, z: 0 });
   const [isAvailable, setIsAvailable] = useState<boolean>(false);
+  const [bufferStatus, setBufferStatus] = useState({ count: 0, isSubmitting: false });
+  const dataBuffer = useRef<DataBuffer | null>(null);
 
   useEffect(() => {
     checkGyroscopeAvailability();
+    
+    // Initialize data buffer if deviceId is provided
+    if (deviceId) {
+      dataBuffer.current = new DataBuffer(deviceId);
+      dataBuffer.current.startBuffering();
+    }
     
     let latestData: GyroscopeData = { x: 0, y: 0, z: 0 };
     
@@ -27,13 +41,30 @@ export default function GyroscopeDisplay() {
 
     const updateInterval = setInterval(() => {
       setData({ ...latestData });
+      
+      // Add data to buffer only once per second (instead of 10 times per second)
+      if (dataBuffer.current) {
+        const movement = getMovementDescription(latestData.x, latestData.y, latestData.z);
+        dataBuffer.current.addRecord(latestData.x, latestData.y, latestData.z, movement);
+      }
+      
+      // Update buffer status
+      if (dataBuffer.current) {
+        setBufferStatus(dataBuffer.current.getBufferStatus());
+      }
     }, 1000);
 
     return () => {
       subscription && subscription.remove();
       clearInterval(updateInterval);
+      
+      // Clean up data buffer
+      if (dataBuffer.current) {
+        dataBuffer.current.stopBuffering();
+        dataBuffer.current.flushBuffer(); // Send any remaining data
+      }
     };
-  }, []);
+  }, [deviceId]);
 
   const checkGyroscopeAvailability = async () => {
     try {
@@ -114,6 +145,21 @@ export default function GyroscopeDisplay() {
           Values represent angular velocity in radians per second
         </ThemedText>
       </ThemedView>
+      
+      {deviceId && (
+        <ThemedView style={styles.bufferContainer}>
+          <ThemedText style={styles.bufferTitle}>Data Streaming</ThemedText>
+          <ThemedText style={styles.bufferInfo}>
+            Buffered records: {bufferStatus.count}
+          </ThemedText>
+          <ThemedText style={styles.bufferInfo}>
+            Status: {bufferStatus.isSubmitting ? 'Submitting...' : 'Collecting'}
+          </ThemedText>
+          <ThemedText style={styles.bufferInfo}>
+            Submission interval: Every 5 seconds
+          </ThemedText>
+        </ThemedView>
+      )}
     </ThemedView>
   );
 }
@@ -172,5 +218,26 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontStyle: 'italic',
     opacity: 0.7,
+  },
+  bufferContainer: {
+    marginTop: 16,
+    paddingTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(0, 0, 0, 0.1)',
+    backgroundColor: 'rgba(0, 122, 255, 0.05)',
+    borderRadius: 8,
+    padding: 12,
+  },
+  bufferTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 8,
+    color: '#007AFF',
+  },
+  bufferInfo: {
+    fontSize: 12,
+    opacity: 0.8,
+    marginBottom: 4,
+    fontFamily: 'monospace',
   },
 });
