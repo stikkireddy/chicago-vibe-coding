@@ -12,7 +12,7 @@ interface DatabricksConfig {
 
 export function DatabricksDashboardMount() {
   const containerRef = useRef<HTMLDivElement>(null)
-  const dashboardRef = useRef<any>(null)
+  const dashboardRef = useRef<DatabricksDashboard | null>(null)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [config, setConfig] = useState<DatabricksConfig | null>(null)
@@ -29,8 +29,20 @@ export function DatabricksDashboardMount() {
           throw new Error(configResult.error || 'Failed to get Databricks configuration')
         }
 
-        console.log("Configuration loaded:", configResult.data)
-        setConfig(configResult.data)
+        const { instanceUrl, workspaceId, dashboardId } = configResult.data
+        
+        if (!instanceUrl || !workspaceId || !dashboardId) {
+          throw new Error('Missing required configuration values: instanceUrl, workspaceId, or dashboardId')
+        }
+
+        const validatedConfig: DatabricksConfig = {
+          instanceUrl,
+          workspaceId,
+          dashboardId
+        }
+
+        console.log("Configuration loaded:", validatedConfig)
+        setConfig(validatedConfig)
         setConfigLoaded(true)
       } catch (err) {
         console.error("Failed to load configuration:", err)

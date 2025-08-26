@@ -1,18 +1,29 @@
 import 'server-only'
 
+interface AuthorizationDetails {
+  type: string;
+  actions: string[];
+  locations: string[];
+  [key: string]: unknown;
+}
+
 interface TokenInfoResponse {
-  authorization_details: any;
-  [key: string]: any;
+  authorization_details: AuthorizationDetails[];
+  [key: string]: unknown;
 }
 
 interface OidcTokenResponse {
   access_token: string;
-  [key: string]: any;
+  token_type?: string;
+  expires_in?: number;
+  [key: string]: unknown;
 }
 
 interface ScopedTokenResponse {
   access_token: string;
-  [key: string]: any;
+  token_type?: string;
+  expires_in?: number;
+  [key: string]: unknown;
 }
 
 interface DashboardTokens {
@@ -34,10 +45,6 @@ const formContentType = {
     'Content-Type': 'application/x-www-form-urlencoded',
 };
 
-const jsonContentType = {
-    'Content-Type': 'application/json',
-};
-
 async function validateEnvironmentVariables(): Promise<void> {
     if (!instanceUrl || !dashboardId || !servicePrincipalId || !servicePrincipalSecret || !externalViewerId || !externalValue) {
         console.error(`Error: Missing required environment variables. All of the following are required:
@@ -53,7 +60,7 @@ EXTERNAL_VALUE (e.g. "john.doe@example.com" - PII OK)               Received: ${
 }
 
 async function fetchOidcToken(): Promise<string> {
-    console.log('Fetching OIDC token...');
+    console.log(`Fetching OIDC token... for: ${servicePrincipalId}`);
 
     const oidcResponse = await fetch(`${instanceUrl}/oidc/v1/token`, {
         method: 'POST',

@@ -75,7 +75,7 @@ export default function DevicesPage() {
       } else {
         setError(result.error || 'Failed to fetch devices')
       }
-    } catch (err) {
+    } catch {
       setError('Failed to fetch devices')
     } finally {
       setLoading(false)
@@ -92,7 +92,7 @@ export default function DevicesPage() {
       } else {
         setError(result.error || 'Failed to seed devices')
       }
-    } catch (err) {
+    } catch {
       setError('Failed to seed devices')
     }
   }
@@ -106,7 +106,7 @@ export default function DevicesPage() {
       } else {
         setError(result.error || 'Failed to add device')
       }
-    } catch (err) {
+    } catch {
       setError('Failed to add device')
     }
   }
