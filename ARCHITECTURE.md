@@ -15,8 +15,8 @@ graph TB
     
     subgraph "Gateway Service"
         B[FastAPI Gateway]
-        B1[/api/v1/devices/register]
-        B2[/api/v1/ingest]
+        B1["Device Register API"]
+        B2["Data Ingest API"]
         B3[ZerobusSdk Integration]
     end
     
@@ -48,14 +48,14 @@ graph TB
         F3[Claude Code MCP Tools]
     end
     
-    A --> B: "HTTP REST API"
-    B --> D: "Device Registration"
-    B --> E1: "Stream Sensor Data"
-    C --> D: "Fetch Device Data"
-    C --> E3: "Embed Dashboard"
-    E2 --> E3: "Real-time Updates"
-    F --> B: "Service Configuration"
-    F --> C: "App Configuration"
+    A -->|HTTP REST API| B
+    B -->|Device Registration| D
+    B -->|Stream Sensor Data| E1
+    C -->|Fetch Device Data| D
+    C -->|Embed Dashboard| E3
+    E2 -->|Real-time Updates| E3
+    F -->|Service Configuration| B
+    F -->|App Configuration| C
     
     A1 --> B1
     A2 --> A3
