@@ -1,13 +1,26 @@
 # Example Prompts
 
 ## Slides & Presentation Development
+
+### Content Strategy & Messaging
+- "focus more on agent, spec, intent based coding and not trying to zero shot 'vibe' code. the goal is to create a controlled outcome"
+- "change the title slide from vibe coding to vibe coding at scale using Databricks"
+- "the title should be AI + Databricks + Data = Success" 
+- "also include use the right tools and reference https://github.com/punkpeye/awesome-mcp-servers"
+
+### Slide Structure & Organization
 - Set up slides for a vibe coding workshop using Slidev framework
+- "make a slide 2 which suggests the user to install expo go on android store or apple app store which helps install the native app on their phone"
+- "make a slide 3 that highlights my personal workflow on projects that i collaborate on startups: 1. Plan (chatgpt or claude) 2. Research (Deep research in one of the llms) 3. Delegate (Create Github issues, claude code commands) 4. Test (Integration tests, functional tests) 5. Fix (Plan and fix things that are broken) 6. Review (Review the PR, always manually review in detail for auth, security and performance critical components (i do this based on folder structure)) 7. repeat the process"
+- "make a slide 04.5 which is the app stack in detail that splits it up into backend, frontend, middleware, auth & identity"
 - Create 10-slide presentation covering tech stack choices for AI-powered development
-- Fix color contrast issues for dark mode environments
-- Adjust slide backgrounds from light colors to dark (gray-800) with white text
-- Structure slides with interactive elements, code examples, and visual transitions
 - Split slides into separate markdown files using ziggiz pattern for easier editing
-- Remove emojis from slides to create professional appearance
+
+### Content Refinements & Updates
+- "clean up the title of slide @slides/pages/slides/04-why-tech-choices.md based on the content"
+- "at the bottom of the slide explain what mcp in ELI5 with an analogy short"
+- "change title of @slides/pages/slides/05-backend-choices.md slide to Database Choices"
+- "in @slides/pages/slides/06-services-apis.md adjust the note at the bottom for why this stack"
 - Update stack slides to reference actual app technologies with specific examples
 - Change slide focus to "AI Coding on Databricks" rather than general development
 - Include Databricks Native Auth alongside external auth providers
@@ -16,6 +29,19 @@
 - Add spec-driven development resources and command examples
 - Update authentication slides to emphasize JWT tokens and stateless auth
 - Focus final slide on project-specific tech stack rather than generic tools
+
+### Visual & Design Updates  
+- Fix color contrast issues for dark mode environments
+- "fix the color i cant see it its dark mode"
+- "make it so that the left and the right are aligned cleanly in this new slide like a grid with the title"
+- Adjust slide backgrounds from light colors to dark (gray-800) with white text
+- Structure slides with interactive elements, code examples, and visual transitions
+- Remove emojis from slides to create professional appearance
+
+### File Management
+- "you should fix @slides/slides.md to refer to these new slides"
+- "dont rename any slide just make a new slide"
+- "on the right mention to use github to manage code"
 
 ## Navigation & UI Layout
 - Clean up router to automatically redirect to dashboard
