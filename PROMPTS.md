@@ -1,5 +1,22 @@
 # Example Prompts
 
+## Slides & Presentation Development
+- Set up slides for a vibe coding workshop using Slidev framework
+- Create 10-slide presentation covering tech stack choices for AI-powered development
+- Fix color contrast issues for dark mode environments
+- Adjust slide backgrounds from light colors to dark (gray-800) with white text
+- Structure slides with interactive elements, code examples, and visual transitions
+- Split slides into separate markdown files using ziggiz pattern for easier editing
+- Remove emojis from slides to create professional appearance
+- Update stack slides to reference actual app technologies with specific examples
+- Change slide focus to "AI Coding on Databricks" rather than general development
+- Include Databricks Native Auth alongside external auth providers
+- Add Databricks Asset Bundles CLI and APIs to collaboration workflow
+- Reference Claude + MCP + Commands + Agents for extensible AI workflows
+- Add spec-driven development resources and command examples
+- Update authentication slides to emphasize JWT tokens and stateless auth
+- Focus final slide on project-specific tech stack rather than generic tools
+
 ## Navigation & UI Layout
 - Clean up router to automatically redirect to dashboard
 - Configure navbar with Dashboard, Device, Status, Documentation, and Settings sections (remove projects)
@@ -77,6 +94,19 @@
 - Create tmux usage guidelines in CLAUDE.md
 - Add application name from Makefile to CLAUDE.md
 - Organize example prompts by category (this file)
+
+## Code Quality & TypeScript Fixes
+- Fix unused variable warnings in devices/page.tsx catch blocks
+- Fix no-explicit-any errors in databricks-dashboard.tsx component
+- Fix no-explicit-any errors and unused variables in dashboard.ts
+- Add proper TypeScript interfaces for token responses and authorization details
+- Fix TypeScript error for DatabricksConfig with undefined properties validation
+
+## Architecture & Documentation
+- Update ARCHITECTURE.py with mermaid diagram of system architecture
+- Describe high-level tech stack and value proposition for each technology
+- Convert architecture.md to be fully Markdown compatible (remove Python docstrings)
+- Fix mermaid diagram syntax issues for GitHub rendering compatibility
 
 ## Quick Tests & Utilities
 - Ping connectivity tests
