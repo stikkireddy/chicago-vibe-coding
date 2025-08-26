@@ -1,26 +1,35 @@
-import { StyleSheet, View } from 'react-native';
-import Constants from 'expo-constants';
-import { useState, useEffect } from 'react';
+import { StyleSheet, View, ActivityIndicator, Pressable } from 'react-native';
+import { useState } from 'react';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import GyroscopeDisplay from '@/components/GyroscopeDisplay';
+import { DeviceService } from '@/services/deviceService';
+import { DeviceRegistrationResponse } from '@/types/api';
 
 export default function HomeScreen() {
-  const [deviceId, setDeviceId] = useState<string>('');
+  const insets = useSafeAreaInsets();
+  const [deviceRegistration, setDeviceRegistration] = useState<DeviceRegistrationResponse | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const generateDeviceId = () => {
-      const id = Constants.installationId || 
-        `device-${Math.random().toString(36).substr(2, 8)}-${Date.now().toString(36)}`;
-      setDeviceId(id);
-    };
-    
-    generateDeviceId();
-  }, []);
+  const handleRegisterDevice = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const registration = await DeviceService.registerDevice();
+      setDeviceRegistration(registration);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Device registration failed');
+      console.error('Device registration error:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView style={[styles.container, { paddingTop: insets.top + 10 }]}>
       <View style={styles.header}>
         <View style={styles.logoContainer}>
           <ThemedText style={styles.logoText}>databricks</ThemedText>
@@ -29,19 +38,67 @@ export default function HomeScreen() {
       </View>
       
       <ThemedView style={styles.deviceContainer}>
-        <ThemedText style={styles.deviceText}>
-          Device ID: {deviceId}
-        </ThemedText>
+        {!deviceRegistration && !isLoading && !error ? (
+          <View style={styles.registrationContainer}>
+            <ThemedText style={styles.registrationPrompt}>
+              Ready to start tracking device data
+            </ThemedText>
+            <Pressable
+              style={styles.registerButton}
+              onPress={handleRegisterDevice}
+            >
+              <ThemedText style={styles.registerButtonText}>
+                Register Device
+              </ThemedText>
+            </Pressable>
+          </View>
+        ) : isLoading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="small" color="#FF3621" />
+            <ThemedText style={styles.deviceText}>Registering device...</ThemedText>
+          </View>
+        ) : error ? (
+          <View>
+            <ThemedText style={[styles.deviceText, styles.errorText]}>
+              Registration Error: {error}
+            </ThemedText>
+            <Pressable
+              style={[styles.registerButton, styles.retryButton]}
+              onPress={handleRegisterDevice}
+            >
+              <ThemedText style={styles.registerButtonText}>
+                Try Again
+              </ThemedText>
+            </Pressable>
+          </View>
+        ) : deviceRegistration ? (
+          <View>
+            <ThemedText style={[styles.deviceText, styles.successText]}>
+              ✓ Device Registered Successfully
+            </ThemedText>
+            <ThemedText style={styles.deviceText}>
+              Device ID: {deviceRegistration.device_id}
+            </ThemedText>
+            <ThemedText style={styles.deviceSubText}>
+              Status: {deviceRegistration.status}
+            </ThemedText>
+            <ThemedText style={styles.deviceSubText}>
+              Registered: {new Date(deviceRegistration.timestamp).toLocaleString()}
+            </ThemedText>
+          </View>
+        ) : null}
       </ThemedView>
       
-      <GyroscopeDisplay />
+      {deviceRegistration && !isLoading && !error && (
+        <GyroscopeDisplay />
+      )}
       
       <ThemedView style={styles.contentContainer}>
         <ThemedText type="subtitle" style={styles.welcomeText}>
           Welcome to the Chicago Vibe Coding Workshop
         </ThemedText>
         <ThemedText style={styles.description}>
-          This mobile app connects to your Databricks workspace and demonstrates 
+          This mobile app connects to an ingestion service and demonstrates 
           real-time device tracking with gyroscope data.
         </ThemedText>
       </ThemedView>
@@ -57,7 +114,7 @@ const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
     marginBottom: 30,
-    marginTop: 20,
+    marginTop: 10,
   },
   logoContainer: {
     backgroundColor: '#FF3621', // Databricks orange
@@ -90,6 +147,53 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#1B3139',
     fontWeight: '600',
+  },
+  deviceSubText: {
+    fontSize: 12,
+    fontFamily: 'monospace',
+    textAlign: 'center',
+    color: '#1B3139',
+    opacity: 0.7,
+    marginTop: 4,
+  },
+  loadingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+  },
+  errorText: {
+    color: '#FF3621',
+  },
+  successText: {
+    color: '#4CAF50',
+    fontWeight: 'bold',
+  },
+  registrationContainer: {
+    alignItems: 'center',
+    gap: 15,
+  },
+  registrationPrompt: {
+    fontSize: 16,
+    textAlign: 'center',
+    color: 'white',
+    fontWeight: '500',
+  },
+  registerButton: {
+    backgroundColor: '#FF3621',
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 8,
+    minWidth: 140,
+    alignItems: 'center',
+  },
+  registerButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  retryButton: {
+    marginTop: 10,
   },
   contentContainer: {
     marginTop: 20,

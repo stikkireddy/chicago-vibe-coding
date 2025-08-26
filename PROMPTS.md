@@ -37,8 +37,28 @@
 - Add proper validation for missing environment variables
 - Update databricks-dashboard component to load config from server
 
-## Mobile App Development & Branding
+## Gateway Service Development
+- Set up src directory structure and FastAPI in @gateway/
+- Configure pyproject.toml with proper package layout similar to @mcp/ structure
+- Set up python-dotenv for loading environment variables from .env file locally
+- Fix Python import issues for src layout and package execution
+- Add async PostgreSQL support with proper connection pooling
+- Create device registration API endpoint using database schema from @app/
+- Integrate with Databricks PostgreSQL database for device management
+
+## Mobile App Development & Device Registration
 - Clean up React Native Expo app and apply Databricks branding/logo
+- Add environment variable for build .env with GATEWAY_URL
+- Implement device registration API call to /api/v1/devices/register
+- Create device registration flow with button-triggered registration
+- Display device ID, status, and timestamp from server response
+- Show registration states: initial button, loading, success, and error handling
+- Only display gyroscope data after successful device registration
+
+## UI & Design Improvements
+- Fix text color contrast for better readability
+- Adjust header layout to avoid iPhone notch overlap using safe area insets
+- Update registration prompt text to white color for visibility
 
 ## Documentation & Configuration
 - Add installation instructions to README (brew, pyenv, nvm, nodejs, databricks CLI, tmux)

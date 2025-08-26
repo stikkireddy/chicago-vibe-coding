@@ -1,0 +1,10 @@
+syntax = "proto2";
+
+message DeviceData {
+    optional string device_id = 1;
+    optional float x_axis = 2;
+    optional float y_axis = 3;
+    optional float z_axis = 4;
+    optional string movement = 5;
+    optional int64 timestamp = 6;
+}

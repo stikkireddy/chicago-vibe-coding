@@ -35,6 +35,9 @@
         }
       ]
     ],
+    "extra": {
+      "gatewayUrl": "http://chicago-vibe-coding-event.safetunnel.io/"
+    },
     "experiments": {
       "typedRoutes": true
     }
