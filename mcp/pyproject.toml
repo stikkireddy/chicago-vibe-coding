@@ -1,0 +1,41 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "databricks-mcp"
+version = "0.1.0"
+description = "Databricks MCP server with basic ping tool"
+authors = [{name = "Developer", email = "dev@example.com"}]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "databricks-sdk>=0.64.0",
+    "fastmcp>=0.1.0",
+]
+
+[project.scripts]
+databricks-mcp = "databricks_mcp.server:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/databricks_mcp"]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "black",
+    "isort",
+    "mypy",
+]
+
+[tool.black]
+line-length = 88
+target-version = ['py310']
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
